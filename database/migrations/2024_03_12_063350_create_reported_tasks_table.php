@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string("subject", 32);
             $table->text("text");
             $table->text("answer");
-            $table->text("reason_comment");
+            $table->text("reason_comment")
+                ->nullable();
             $table->uuid("author_id");
             $table->timestamps();
         });
