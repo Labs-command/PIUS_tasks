@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reported_tasks', function (Blueprint $table) {
-            $table->uuid("task_id");
-            $table->string("subject", 32);
-            $table->text("text");
-            $table->text("answer");
-            $table->text("reason_comment")
-                ->nullable();
-            $table->uuid("author_id");
-            $table->timestamps();
-        });
+        Schema::create(
+            'reported_tasks', function (Blueprint $table) {
+                $table->uuid("task_id")->unique();
+                $table->string("subject", 32);
+                $table->text("text")->unique();
+                $table->text("answer");
+                $table->text("reason_comment")
+                    ->nullable();
+                $table->uuid("author_id");
+                $table->timestamps();
+            }
+        );
     }
 
     /**
