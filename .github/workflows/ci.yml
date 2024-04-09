@@ -9,9 +9,13 @@ on:
       - main
 
 env:
-  REGISTRY_LOGIN: ${{ secrets.REGISTRY_LOGIN }}
+  REGISTRY_LOGIN: ${{ vars.REGISTRY_LOGIN }}
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
   ENV: ${{ secrets.DEV_ENV }}
+  SERVER_SSH_KEY: ${{ secrets.SERVER_KEY }}
+  SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+  SERVER_IP: ${{ secrets.SERVER_IP }}
+  REPO_NAME: ${{ vars.REPO_NAME }}
 
 jobs:
   build:
@@ -28,9 +32,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=$REGISTRY_LOGIN/${{vars.REPO_NAME}}:${{ github.sha }}
-          printf "%s" "$ENV" >> .env
-          printf "%s" "$ENV"
+          cat routes/web.php
+          IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
+          printf "%s" "$ENV" > .env
           docker build . -t $IMAGE_NAME
           docker push $IMAGE_NAME
 
@@ -49,6 +53,31 @@ jobs:
 
       - name: Pull Docker image
         run: |
-          IMAGE_NAME=$REGISTRY_LOGIN/${{vars.REPO_NAME}}:${{ github.sha }}
+          IMAGE_NAME=$REGISTRY_LOGIN/$REPO_NAME:${{ github.sha }}
           docker pull $IMAGE_NAME
-          docker run $IMAGE_NAME php artisan test
+          docker run $IMAGE_NAME php artisan test || (echo "Tests failed" && docker rmi $IMAGE_NAME && exit 1)
+
+  deploy:
+    name: Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: SSH and deploy Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SERVER_KEY }}
+          port: 22
+          script: |
+            IMAGE_NAME=${{ vars.REGISTRY_LOGIN }}/${{ vars.REPO_NAME }}:${{ github.sha }}
+            mkdir -p ${{ vars.COMPOSE_PATH }}
+            rm ${{ vars.COMPOSE_PATH }}/docker-compose.yml
+            printf "%s" "${{ secrets.DOCKER_COMPOSE }}" >> ${{ vars.COMPOSE_PATH }}/docker-compose.yml
+            sed -i "s|~IMAGE~|$IMAGE_NAME|g" ${{ vars.COMPOSE_PATH }}/docker-compose.yml
+            docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml down
+            docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml pull
+            docker-compose -f ${{ vars.COMPOSE_PATH }}/docker-compose.yml up -d
