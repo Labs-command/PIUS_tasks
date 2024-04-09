@@ -1,3 +1,5 @@
+docker-compose.yml
+
 /.phpunit.cache
 /node_modules
 /public/build
