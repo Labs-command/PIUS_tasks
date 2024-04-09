@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Controller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('tasks')->group(
     function () {
-
+        Route::get('/', [Controller::class, 'mock']);
     }
 );
