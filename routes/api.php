@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportedTaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::prefix('/reported-tasks')->group(
+    function () {
+        Route::get('/', [ReportedTaskController::class, 'search']);
+        Route::get('/{id}', [ReportedTaskController::class, 'get']);
+        Route::post('/', [ReportedTaskController::class, 'create']);
+        //Route::put('/{id}', [ReportedTaskController::class, 'replace']);
+        Route::patch('/{id}', [ReportedTaskController::class, 'patch']);
+        Route::delete('/{id}', [ReportedTaskController::class, 'delete']);
+
+    }
+);

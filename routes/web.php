@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportedTaskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 /*
@@ -12,8 +13,4 @@ use App\Http\Controllers\Controller;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::prefix('tasks')->group(
-    function () {
-        Route::get('/', [Controller::class, 'mock']);
-    }
-);
+
