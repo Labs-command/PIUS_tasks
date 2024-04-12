@@ -18,6 +18,7 @@ class ReportedTask extends Model
     ];
 
     protected $primaryKey = 'task_id';
+    protected $keyType = 'string';
     public $incrementing = false;
 
     public static function boot(): void

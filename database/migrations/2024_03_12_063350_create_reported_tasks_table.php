@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create(
             'reported_tasks', function (Blueprint $table) {
-                $table->uuid("task_id")->unique();
+                $table->uuid("task_id")->primary();
                 $table->string("subject", 32);
                 $table->text("text")->unique();
                 $table->text("answer");

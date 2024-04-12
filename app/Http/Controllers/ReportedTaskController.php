@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -9,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
+use SebastianBergmann\Diff\Exception;
 
 class ReportedTaskController extends Controller
 {
@@ -23,24 +26,72 @@ class ReportedTaskController extends Controller
 
     public function search(Request $request): JsonResponse
     {
-        $tasks = $this->reportedTasksService->search($request);
+        try{
+            $tasks = $this->reportedTasksService->search($request);
 
-        return response()->json($tasks);
+            return response()->json($tasks);
+
+        } catch(\Exception $e){
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
 
     }
 
+    /**
+     * @OA\Get(
+     *     path="/examples",
+     *     operationId="examplesAll",
+     *     tags={"Examples"},
+     *     summary="Display a listing of the resource",
+     *     security={
+     *       {"api_key": {}},
+     *     },
+     * @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="The page number",
+     *         required=false,
+     * @OA\Schema(
+     *             type="integer",
+     *         )
+     *     ),
+     * @OA\Response(
+     *         response="200",
+     *         description="Everything is fine",
+     * @OA\MediaType(
+     *             mediaType="application/json",
+     * @OA\Schema()
+     *         )
+     *     ),
+     * )
+     *
+     * Display a listing of the resource.
+     *
+     * @param  $id
+     * @return JsonResponse
+     */
     public function get($id): JsonResponse
     {
-        $tasks = $this->reportedTasksService->get($id);
+        try{
+            $tasks = $this->reportedTasksService->get($id);
+            return response()->json($tasks);
+        }catch(\Exception $e){
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
 
-        return response()->json($tasks);
     }
 
     public function create(Request $request):JsonResponse
     {
-        $tasks = $this->reportedTasksService->create($request);
-
-        return response()->json($tasks);
+        try{
+            $tasks = $this->reportedTasksService->create($request);
+            return response()->json($tasks);
+        }catch(\Exception $e){
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
     }
 
     //    public function replace($id ,Request $request): JsonResponse
@@ -50,18 +101,28 @@ class ReportedTaskController extends Controller
     //        return response()->json($result);
     //    }
 
-    public function patch($id ,Request $request)
+    public function patch($id ,Request $request): JsonResponse
     {
-        $result = $this->reportedTasksService->patch($id, $request);
-
-        return response()->json($result);
+        try{
+            $result = $this->reportedTasksService->patch($id, $request);
+            return response()->json($result);
+        }catch(\Throwable $e){
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
     }
 
     public function delete($id): JsonResponse
     {
-        $result = $this->reportedTasksService->delete($id);
+        try{
+            $result = $this->reportedTasksService->delete($id);
+            return response()->json($result);
 
-        return response()->json($result);
+        }catch(\Exception $e){
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
+
     }
 
 
