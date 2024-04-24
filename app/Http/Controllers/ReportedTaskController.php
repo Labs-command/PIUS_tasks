@@ -24,7 +24,7 @@ class ReportedTaskController extends Controller
     }
 
 
-    public function search(Request $request): JsonResponse
+    public function search(Request $request): JsonResponse //ресурc возвращать
     {
         try{
             $tasks = $this->reportedTasksService->search($request);
@@ -105,8 +105,8 @@ class ReportedTaskController extends Controller
     {
         try{
             $result = $this->reportedTasksService->patch($id, $request);
-            return response()->json($result);
-        }catch(\Throwable $e){
+            return esponse()->jsron($result);
+        }catch(\Exception $e){
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }

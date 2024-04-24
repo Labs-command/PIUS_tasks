@@ -15,7 +15,7 @@ return new class extends Migration
             'reported_tasks', function (Blueprint $table) {
                 $table->uuid("task_id")->primary();
                 $table->string("subject", 32);
-                $table->text("text")->unique();
+                $table->text("text");
                 $table->text("answer");
                 $table->text("reason_comment")
                     ->nullable();

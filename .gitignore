@@ -4,6 +4,7 @@ docker-compose.yml
 /node_modules
 /public/build
 /public/hot
+keys/*.pem
 /public/storage
 /storage/*.key
 /vendor
