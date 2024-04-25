@@ -41,14 +41,16 @@ class TasksService
         //Если оба поля пустые, возвращаем ошибку
         if (($request->has("subject") && $request->has("text"))) {
             throw new Exception("It is impossible to use both subject and text at the same time", 400);
-        } elseif (!($request->has("subject") || $request->has("text"))) {
-            throw new Exception("Either subject or text is required", 400);
         }
-
+        $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
+        $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
 
         $params = [
+
             "index" => "tasks-index",
             "body" => [
+                "from" => $offset,
+                "size" => $limit,
                 "query" => [
                     "bool" => [
                         "must" => []
@@ -65,7 +67,12 @@ class TasksService
         }
 
         $tasks = ClientBuilder::create()->build()->search($params);
-        return ["data" => $tasks["hits"]["hits"]];
+        return ["data" => $tasks["hits"]["hits"],
+                "meta" => [
+                    "offset" => $offset,
+                    "limit" => $limit
+                ]
+        ];
     }
 
     /**
@@ -82,6 +89,11 @@ class TasksService
             }
         }
 
+        $missingFields = array_diff($column_names, $request->keys());
+        if (count($missingFields) > 0) {
+            throw new \Exception("Missing required fields: " . implode(', ', $missingFields), 400);
+        }
+
         $uuid = Uuid::uuid4()->toString();
         $now = Carbon::now(new \DateTimeZone('UTC'));
         $formattedDate = $now->format('Y-m-d\TH:i:s.u\Z');
@@ -89,8 +101,8 @@ class TasksService
 
         $params = [
             'index' => 'tasks-index',
-            'id'    => $uuid,
-            'body'  => [
+            'id' => $uuid,
+            'body' => [
                 'subject' => $request["subject"],
                 'text' => $request['text'],
                 'answer' => $request['answer'],

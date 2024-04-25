@@ -40,23 +40,25 @@ class TaskController extends Controller
         }
 
     }
-    public function create(Request $request):JsonResponse
+
+    public function create(Request $request): JsonResponse
     {
-        try{
+        try {
             $tasks = $this->tasksService->create($request);
             return response()->json($tasks);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
     }
+
     public function delete($id): JsonResponse
     {
-        try{
+        try {
             $result = $this->tasksService->delete($id);
             return response()->json($result);
 
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
