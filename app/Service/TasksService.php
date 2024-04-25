@@ -11,8 +11,6 @@ use Ramsey\Uuid\Uuid;
 
 class TasksService
 {
-
-
     /**
      * @throws Exception
      */
@@ -25,6 +23,14 @@ class TasksService
 
         try {
             $task = ClientBuilder::create()->build()->get($params);
+            $taskId = $task['_id'];
+            $taskBody = $task['_source'];
+
+            $task = [
+                "id" => $taskId,
+            ];
+
+            $task = array_merge($task, $taskBody);
             return ["data" => $task];
         } catch (\Elasticsearch\Common\Exceptions\Missing404Exception $e) {
             throw new Exception("Task not found", 404);
@@ -122,7 +128,7 @@ class TasksService
 
         $response = ClientBuilder::create()->build()->index($params);
 
-        return $response;
+        return $this->get($response["_id"]);
 
 
     }
