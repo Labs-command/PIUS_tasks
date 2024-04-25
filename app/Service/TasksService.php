@@ -53,6 +53,8 @@ class TasksService
             $params = [
                 'index' => 'tasks-index',
                 'body' => [
+                    "from" => $offset,
+                    "size" => $limit,
                     'query' => [
                         'bool' => [
                             'should' => [
