@@ -43,36 +43,53 @@ class TasksService
      */
     public function search($request): array
     {
-        //Если оба поля пустые, возвращаем ошибку
-        if (($request->has("subject") && $request->has("text"))) {
-            throw new Exception("It is impossible to use both subject and text at the same time", 400);
-        }
         $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
 
-        $params = [
+        $must = [];
 
-            "index" => "tasks-index",
-            "body" => [
+        if ($request->filled('author_id')) {
+            $must[] = [
+                'term' => [
+                    'author_id' => [
+                        'value' => $request->input('author_id')
+                    ]
+                ]
+            ];
+        }
+
+        if ($request->filled('subject')) {
+            $must[] = [
+                'match' => [
+                    'subject' => $request->input('subject')
+                ]
+            ];
+        }
+
+        if ($request->filled('text')) {
+            $must[] = [
+                'match' => [
+                    'text' => $request->input('text')
+                ]
+            ];
+        }
+
+        $params = [
+            'index' => 'tasks-index',
+            'body'  => [
                 "from" => $offset,
                 "size" => $limit,
-                "query" => [
-                    "bool" => [
-                        "must" => []
+                'query' => [
+                    'bool' => [
+                        'must' => $must
                     ]
                 ]
             ]
         ];
 
-        // Добавляем только одно условие в зависимости от того, какое поле было предоставлено
-        if ($request->has("subject")) {
-            $params["body"]["query"]["bool"]["must"][] = ["match" => ["subject" => $request["subject"]]];
-        } elseif ($request->has("text")) {
-            $params["body"]["query"]["bool"]["must"][] = ["match" => ["text" => $request["text"]]];
-        }
 
         $tasks = ClientBuilder::create()->build()->search($params)['hits']['hits'];
-        for($i = 0; $i < count($tasks); $i++) {
+        for ($i = 0; $i < count($tasks); $i++) {
             $taskId = $tasks[$i]['_id'];
             $taskBody = $tasks[$i]['_source'];
 
@@ -83,10 +100,10 @@ class TasksService
             $tasks[$i] = array_merge($tasks[$i], $taskBody);
         }
         return ["data" => $tasks,
-                "meta" => [
-                    "offset" => $offset,
-                    "limit" => $limit
-                ]
+            "meta" => [
+                "offset" => $offset,
+                "limit" => $limit
+            ]
         ];
     }
 
