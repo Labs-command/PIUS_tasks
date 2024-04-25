@@ -3,14 +3,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\ReportedTask;
 use App\Service\ReportedTasksService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Uuid;
-use SebastianBergmann\Diff\Exception;
+
 
 class ReportedTaskController extends Controller
 {
@@ -22,7 +18,35 @@ class ReportedTaskController extends Controller
         $this->reportedTasksService = $reportedTasksService;
     }
 
-
+    /**
+     * @OA\Get(
+     *    path="/tasks/api/v1/reported-tasks",
+     *    summary="Поиск по параметрам",
+     *    tags={"Reported Task"},
+     *
+     * @OA\RequestBody(
+     * @OA\JsonContent(
+     *            allOf={
+     * @OA\Schema(
+     * @OA\Property(property="title", type="string", example="Some title"),
+     * @OA\Property(property="likes", type="integer", example=20),
+     *                )
+     *            }
+     *        )
+     *    ),
+     *
+     * @OA\Response(
+     *        response=200,
+     *        description="Ok",
+     * @OA\JsonContent(
+     * @OA\Property(property="data",  type="object",
+     * @OA\Property(property="title", type="string", example="Some title"),
+     * @OA\Property(property="likes", type="integer", example=20),
+     *            ),
+     *        ),
+     *    ),
+     * )
+     */
     public function search(Request $request): JsonResponse //ресурc возвращать
     {
         try {
@@ -38,35 +62,6 @@ class ReportedTaskController extends Controller
     }
 
     /**
-     * @OA\Get(
-     *     path="/examples",
-     *     operationId="examplesAll",
-     *     tags={"Examples"},
-     *     summary="Display a listing of the resource",
-     *     security={
-     *       {"api_key": {}},
-     *     },
-     * @OA\Parameter(
-     *         name="page",
-     *         in="query",
-     *         description="The page number",
-     *         required=false,
-     * @OA\Schema(
-     *             type="integer",
-     *         )
-     *     ),
-     * @OA\Response(
-     *         response="200",
-     *         description="Everything is fine",
-     * @OA\MediaType(
-     *             mediaType="application/json",
-     * @OA\Schema()
-     *         )
-     *     ),
-     * )
-     *
-     * Display a listing of the resource.
-     *
      * @param  $id
      * @return JsonResponse
      */
