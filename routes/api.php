@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/reported-tasks')->group(
     function () {
         Route::get('/{id}', [ReportedTaskController::class, 'get']);
-        Route::get('/', [ReportedTaskController::class, 'search']);
+        Route::post('/search', [ReportedTaskController::class, 'search']);
         Route::post('/', [ReportedTaskController::class, 'create']);
         //Route::put('/{id}', [ReportedTaskController::class, 'replace']);
         Route::patch('/{id}', [ReportedTaskController::class, 'patch']);
@@ -30,7 +30,7 @@ Route::prefix('/reported-tasks')->group(
 Route::prefix('/tasks')->group(
     function () {
         Route::get('/{id}', [TaskController::class, 'get']);
-        Route::get('/', [TaskController::class, 'search']);
+        Route::post('/search', [TaskController::class, 'search']);
         Route::post('/', [TaskController::class, 'create']);
         Route::delete('/{id}', [TaskController::class, 'delete']);
     }

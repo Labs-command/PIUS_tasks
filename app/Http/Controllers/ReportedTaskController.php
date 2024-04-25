@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -26,12 +25,12 @@ class ReportedTaskController extends Controller
 
     public function search(Request $request): JsonResponse //ресурc возвращать
     {
-        try{
+        try {
             $tasks = $this->reportedTasksService->search($request);
 
             return response()->json($tasks);
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -73,22 +72,22 @@ class ReportedTaskController extends Controller
      */
     public function get($id): JsonResponse
     {
-        try{
+        try {
             $tasks = $this->reportedTasksService->get($id);
             return response()->json($tasks);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
 
     }
 
-    public function create(Request $request):JsonResponse
+    public function create(Request $request): JsonResponse
     {
-        try{
+        try {
             $tasks = $this->reportedTasksService->create($request);
             return response()->json($tasks);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -101,12 +100,12 @@ class ReportedTaskController extends Controller
     //        return response()->json($result);
     //    }
 
-    public function patch($id ,Request $request): JsonResponse
+    public function patch($id, Request $request): JsonResponse
     {
-        try{
+        try {
             $result = $this->reportedTasksService->patch($id, $request);
-            return esponse()->jsron($result);
-        }catch(\Exception $e){
+            return response()->json($result);
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -114,17 +113,16 @@ class ReportedTaskController extends Controller
 
     public function delete($id): JsonResponse
     {
-        try{
+        try {
             $result = $this->reportedTasksService->delete($id);
             return response()->json($result);
 
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
 
     }
-
 
 
 }

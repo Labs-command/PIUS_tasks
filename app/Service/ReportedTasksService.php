@@ -18,7 +18,7 @@ class ReportedTasksService
 
         if ($request->has('search_field') && $request->has('search_value')) {
 
-            if(Schema::hasColumn('reported_tasks', $request->search_field)) {
+            if (Schema::hasColumn('reported_tasks', $request->search_field)) {
                 $query->where($request->input('search_field'), 'like', '%' . $request->input('search_value') . '%');
             } else {
                 throw new Exception("Invalid search field", 400);
@@ -39,11 +39,11 @@ class ReportedTasksService
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
         $query->offset($offset)->limit($limit);
 
-        $response = ['data'=>$query->get(), 'meta'=>['search_field'=>$request->search_field,
-            'search_value'=>$request->search_value,
-            'sort_order'=>$sortOrder,
-            'offset'=>$offset,
-            'limit'=>$limit]];
+        $response = ['data' => $query->get(), 'meta' => ['search_field' => $request->search_field,
+            'search_value' => $request->search_value,
+            'sort_order' => $sortOrder,
+            'offset' => $offset,
+            'limit' => $limit]];
 
         return $response;
     }
@@ -53,11 +53,13 @@ class ReportedTasksService
      */
     public function get($id)
     {
-        $task = ReportedTask::find($id);
-        if (!$task) {
-            throw new Exception('Task not found', 404);
+
+        try {
+            $task = ReportedTask::find($id);
+            return ['data' => $task];
+        } catch (Exception $e) {
+            throw new Exception("Task not found", 404);
         }
-        return ['data'=>$task];
     }
 
     /**
@@ -65,12 +67,17 @@ class ReportedTasksService
      */
     public function create($request): array
     {
-        $fieldsToCheck =$request->keys();
+        $fieldsToCheck = $request->keys();
 
         foreach ($fieldsToCheck as $field) {
             if (!Schema::hasColumn('reported_tasks', $field)) {
                 throw new Exception("Field '{$field}' does not exist in the database table", 400);
             }
+        }
+
+        $missingFields = array_diff(["subject", "text", "answer", "reason_comment", "author_id"], $request->keys());
+        if (count($missingFields) > 0) {
+            throw new \Exception("Missing required fields: " . implode(', ', $missingFields), 400);
         }
 
         $task = ReportedTask::create(
@@ -82,7 +89,7 @@ class ReportedTasksService
                 'author_id' => $request->author_id,
             ]
         );
-        return ['data'=>$task];
+        return ['data' => $task];
 
     }
 
@@ -118,19 +125,28 @@ class ReportedTasksService
      */
     public function patch($taskId, $request): array
     {
-        $task = ReportedTask::query()->where('task_id', $taskId)->first();
-        if (!$task) {
-            throw new Exception('Task not found', 404);
+        try {
+            $task = ReportedTask::query()->where('task_id', $taskId)->first();
+        } catch (Exception $e) {
+            throw new Exception("Task not found", 404);
+        }
+
+        $fieldsToCheck = $request->keys();
+
+        foreach ($fieldsToCheck as $field) {
+            if (!Schema::hasColumn('reported_tasks', $field)) {
+                throw new Exception("Field '{$field}' does not exist in the database table", 400);
+            }
         }
 
         $task->update($request->except('id'));
-        return ['data'=>$task];
+        return ['data' => $task];
     }
 
     public function delete($id)
     {
         ReportedTask::destroy($id);
-        return ['data'=>null];
+        return ['data' => null];
 
     }
 
