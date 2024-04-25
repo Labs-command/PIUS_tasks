@@ -59,7 +59,7 @@ class TasksService
                                 [
                                     "multi_match" =>[
                                         'query' => $request->input('search_query'),
-                                        'fields' => ['subject', 'text']
+                                        'fields' => ['subject', 'text', 'answer']
                                     ]
                                 ],
                                 [
@@ -70,6 +70,11 @@ class TasksService
                                 [
                                     "wildcard" =>[
                                         'text' => sprintf('*%s*', $request->input('search_query'))
+                                    ]
+                                ],
+                                [
+                                    "wildcard" =>[
+                                        'answer' => sprintf('*%s*', $request->input('search_query'))
                                     ]
                                 ]
                             ]
