@@ -43,49 +43,64 @@ class TasksService
      */
     public function search($request): array
     {
+
         $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
 
+        global $params;
         $must = [];
+        if ($request->filled('search_query')) {
+            $params = [
+                'index' => 'tasks-index',
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => sprintf("*%s*", $request->input('search_query')),
+                            'fields' => ['subject', 'text']
+                        ]
+                    ]
+                ]
+            ];
+        } else {
 
-        if ($request->filled('author_id')) {
-            $must[] = [
-                'term' => [
-                    'author_id' => [
-                        'value' => $request->input('author_id')
+            if ($request->filled('author_id')) {
+                $must[] = [
+                    'term' => [
+                        'author_id' => [
+                            'value' => $request->input('author_id')
+                        ]
+                    ]
+                ];
+            }
+
+            if ($request->filled('subject')) {
+                $must[] = [
+                    'match' => [
+                        'subject' => $request->input('subject')
+                    ]
+                ];
+            }
+
+            if ($request->filled('text')) {
+                $must[] = [
+                    'match' => [
+                        'text' => $request->input('text')
+                    ]
+                ];
+            }
+            $params = [
+                'index' => 'tasks-index',
+                'body' => [
+                    "from" => $offset,
+                    "size" => $limit,
+                    'query' => [
+                        'bool' => [
+                            'must' => $must
+                        ]
                     ]
                 ]
             ];
         }
-
-        if ($request->filled('subject')) {
-            $must[] = [
-                'match' => [
-                    'subject' => $request->input('subject')
-                ]
-            ];
-        }
-
-        if ($request->filled('text')) {
-            $must[] = [
-                'match' => [
-                    'text' => $request->input('text')
-                ]
-            ];
-        }
-
-        $params = [
-            'index' => 'tasks-index',
-            'body'  => [
-                "from" => $offset,
-                "size" => $limit,
-                'query' => [
-                    'bool' => [
-                        'must' => $must
-                    ]
-                ]
-            ]
-        ];
 
 
         $tasks = ClientBuilder::create()->build()->search($params)['hits']['hits'];
