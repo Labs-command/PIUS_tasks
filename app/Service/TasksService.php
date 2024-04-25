@@ -54,9 +54,26 @@ class TasksService
                 'index' => 'tasks-index',
                 'body' => [
                     'query' => [
-                        'multi_match' => [
-                            'query' => sprintf("*%s*", $request->input('search_query')),
-                            'fields' => ['subject', 'text']
+                        'bool' => [
+                            'should' => [
+                                [
+                                    "multi_match" =>[
+                                        'query' => $request->input('search_query'),
+                                        'fields' => ['subject', 'text']
+                                    ]
+                                ],
+                                [
+                                    "wildcard" =>[
+                                        'subject' => sprintf('*%s*', $request->input('search_query'))
+                                    ]
+                                ],
+                                [
+                                    "wildcard" =>[
+                                        'text' => sprintf('*%s*', $request->input('search_query'))
+                                    ]
+                                ]
+                            ]
+
                         ]
                     ]
                 ]
