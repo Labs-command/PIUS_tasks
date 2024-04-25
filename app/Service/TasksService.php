@@ -37,7 +37,6 @@ class TasksService
      */
     public function search($request): array
     {
-
         //Если оба поля пустые, возвращаем ошибку
         if (($request->has("subject") && $request->has("text"))) {
             throw new Exception("It is impossible to use both subject and text at the same time", 400);
@@ -66,8 +65,18 @@ class TasksService
             $params["body"]["query"]["bool"]["must"][] = ["match" => ["text" => $request["text"]]];
         }
 
-        $tasks = ClientBuilder::create()->build()->search($params);
-        return ["data" => $tasks["hits"]["hits"],
+        $tasks = ClientBuilder::create()->build()->search($params)['hits']['hits'];
+        for($i = 0; $i < count($tasks); $i++) {
+            $taskId = $tasks[$i]['_id'];
+            $taskBody = $tasks[$i]['_source'];
+
+            $tasks[$i] = [
+                "id" => $taskId,
+            ];
+
+            $tasks[$i] = array_merge($tasks[$i], $taskBody);
+        }
+        return ["data" => $tasks,
                 "meta" => [
                     "offset" => $offset,
                     "limit" => $limit
