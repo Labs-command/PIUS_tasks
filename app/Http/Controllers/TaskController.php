@@ -195,6 +195,15 @@ class TaskController extends Controller
      * @OA\Property(property="message",        type="string", example="Invalid search field")
      *         )
      *     )
+     * @OA\Response(
+     *            response=500,
+     *            description="Internal Server Error",
+     * @OA\JsonContent(
+     *                type="object",
+     * @OA\Property(property="errors",         type="string", example="An unexpected error occurred")
+     *            )
+     *      )
+     *  )
      * )
      */
     public function search(Request $request): JsonResponse //ресурc возвращать
