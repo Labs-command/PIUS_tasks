@@ -56,9 +56,12 @@ class ReportedTasksService
 
         try {
             $task = ReportedTask::find($id);
+            if (!$task) {
+                throw new Exception("Task not found", 404);
+            }
             return ['data' => $task];
         } catch (Exception $e) {
-            throw new Exception("Task not found", 404);
+            throw new Exception("Invalid uuid", 400);
         }
     }
 
@@ -120,15 +123,15 @@ class ReportedTasksService
     //        }
     //
     //    }
-    /**
-     * @throws Exception
-     */
     public function patch($taskId, $request): array
     {
         try {
-            $task = ReportedTask::query()->where('task_id', $taskId)->first();
+            $task = ReportedTask::find($taskId);
+            if (!$task) {
+                throw new Exception("Task not found", 404);
+            }
         } catch (Exception $e) {
-            throw new Exception("Task not found", 404);
+            throw new Exception("Invalid uuid", 400);
         }
 
         $fieldsToCheck = $request->keys();

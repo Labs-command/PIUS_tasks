@@ -6,55 +6,640 @@
     },
     "paths": {
         "/api/": {},
-        "/tasks/api/v1/reported-tasks": {
+        "/tasks/api/v1/reported-tasks/search": {
+            "post": {
+                "tags": [
+                    "Reported Task"
+                ],
+                "summary": "Search for reported tasks",
+                "description": "Search through the reported tasks with optional sorting and pagination.if the search field is empty, then all entries are displayed!!!",
+                "operationId": "searchReportedTasks",
+                "parameters": [
+                    {
+                        "name": "search_field",
+                        "in": "query",
+                        "description": "Field name to search by",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "search_value",
+                        "in": "query",
+                        "description": "Value of the field to search for",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_field",
+                        "in": "query",
+                        "description": "Field to sort by",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Order to sort by (asc or desc)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "default": "asc",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset where to start pagination",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit how many tasks to retrieve",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "task_id": {
+                                                        "type": "string",
+                                                        "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                    },
+                                                    "subject": {
+                                                        "type": "string",
+                                                        "example": "laudantium"
+                                                    },
+                                                    "text": {
+                                                        "type": "string",
+                                                        "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                    },
+                                                    "answer": {
+                                                        "type": "string",
+                                                        "example": "nam"
+                                                    },
+                                                    "reason_comment": {
+                                                        "type": "string",
+                                                        "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                                    },
+                                                    "author_id": {
+                                                        "type": "string",
+                                                        "format": "uuid",
+                                                        "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-04-14T16:45:53.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-04-14T16:45:53.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "task_id": "2e8ad285-436c-3387-b4e8-31080551cdc2",
+                                                    "subject": "laudantium",
+                                                    "text": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet.",
+                                                    "answer": "nam",
+                                                    "reason_comment": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur",
+                                                    "author_id": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a",
+                                                    "created_at": "2024-04-14T16:45:53.000000Z",
+                                                    "updated_at": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                {
+                                                    "task_id": "2ef86cd6-ed9c-3d61-9a65-2f891a1ed813",
+                                                    "subject": "ullam",
+                                                    "text": "Eos aut quia quas autem eveniet. Voluptas delectus cupiditate enim enim veritatis et. Similique tempora fuga itaque debitis voluptate ut omnis.",
+                                                    "answer": "odio",
+                                                    "reason_comment": "illum sed omnis qui tempora consequatur et facere voluptatem cupiditate",
+                                                    "author_id": "4b84c22a-dc49-3aad-9693-c4ebc6af4e91",
+                                                    "created_at": "2024-04-14T16:45:53.000000Z",
+                                                    "updated_at": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            ]
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "search_field": {
+                                                    "type": "string",
+                                                    "example": "subject"
+                                                },
+                                                "search_value": {
+                                                    "type": "string",
+                                                    "example": "explicabo"
+                                                },
+                                                "sort_order": {
+                                                    "type": "string",
+                                                    "example": "asc"
+                                                },
+                                                "offset": {
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "limit": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid search or sort field",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Invalid search field"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/api/v1/reported-tasks/{id}": {
             "get": {
                 "tags": [
                     "Reported Task"
                 ],
-                "summary": "Поиск по параметрам",
-                "operationId": "23ddd039a49d42e63bb9d61d8c3cf9a6",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "allOf": [
-                                    {
-                                        "properties": {
-                                            "title": {
-                                                "type": "string",
-                                                "example": "Some title"
-                                            },
-                                            "likes": {
-                                                "type": "integer",
-                                                "example": 20
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                ]
-                            }
+                "summary": "Retrieve a reported task by UUID",
+                "operationId": "4f0db7750607e8e2bdfad71e13e80bf9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The UUID of the reported task to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
                         }
                     }
-                },
+                ],
                 "responses": {
                     "200": {
-                        "description": "Ok",
+                        "description": "Successful retrieval of the reported task",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
                                             "properties": {
-                                                "title": {
+                                                "task_id": {
                                                     "type": "string",
-                                                    "example": "Some title"
+                                                    "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
                                                 },
-                                                "likes": {
-                                                    "type": "integer",
-                                                    "example": 20
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "laudantium"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                },
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "nam"
+                                                },
+                                                "reason_comment": {
+                                                    "type": "string",
+                                                    "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                                },
+                                                "author_id": {
+                                                    "type": "string",
+                                                    "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
                                                 }
                                             },
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid UUID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Invalid UUID format"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Task not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reported Task"
+                ],
+                "summary": "Delete a reported task by UUID",
+                "operationId": "22e476a84dbec2e37a01cc60d8a61a87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "UUID of the reported task to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "null",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Reported Task"
+                ],
+                "summary": "Update specific fields of a reported task",
+                "operationId": "60c2fe98daa27b63651dffc7e0c5b280",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the task to update",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial data of the reported task to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Updated detailed description of the task."
+                                    },
+                                    "answer": {
+                                        "type": "string",
+                                        "example": "Updated initial answer to the task."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "task_id": {
+                                                    "type": "string",
+                                                    "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                },
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "Initilal Subject"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Updated detailed description of the task."
+                                                },
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "Updated answer to the task."
+                                                },
+                                                "reason_comment": {
+                                                    "type": "string",
+                                                    "example": "Initial reason for creating the task."
+                                                },
+                                                "author_id": {
+                                                    "type": "string",
+                                                    "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input, object invalid",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Field 'xyz' does not exist in the database table"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Task not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/api/v1/reported-tasks": {
+            "post": {
+                "tags": [
+                    "Reported Task"
+                ],
+                "summary": "Create a new reported task",
+                "operationId": "0b9a0b3659e975abe526686f351ac44e",
+                "requestBody": {
+                    "description": "Data for creating a new reported task",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "subject",
+                                    "text",
+                                    "answer",
+                                    "reason_comment",
+                                    "author_id"
+                                ],
+                                "properties": {
+                                    "subject": {
+                                        "type": "string",
+                                        "example": "laudantium"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                    },
+                                    "answer": {
+                                        "type": "string",
+                                        "example": "nam"
+                                    },
+                                    "reason_comment": {
+                                        "type": "string",
+                                        "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                    },
+                                    "author_id": {
+                                        "type": "string",
+                                        "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "task_id": {
+                                                    "type": "string",
+                                                    "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                },
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "laudantium"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                },
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "nam"
+                                                },
+                                                "reason_comment": {
+                                                    "type": "string",
+                                                    "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                                },
+                                                "author_id": {
+                                                    "type": "string",
+                                                    "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Missing required fields: subject, text"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
                                         }
                                     },
                                     "type": "object"
