@@ -649,6 +649,463 @@
                     }
                 }
             }
+        },
+        "/tasks/api/v1/tasks/{id}": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Retrieve a task by UUID",
+                "operationId": "f9aeec8745058198f12394f776acb81b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The UUID of the task to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful retrieval of the task",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "task_id": {
+                                                    "type": "string",
+                                                    "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                },
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "laudantium"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                },
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "nam"
+                                                },
+                                                "reason_comment": {
+                                                    "type": "string",
+                                                    "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                                },
+                                                "author_id": {
+                                                    "type": "string",
+                                                    "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid UUID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Invalid UUID format"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Task not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Delete a task by UUID",
+                "operationId": "e926ad213689a77811f9230f1bc1498c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "UUID of the task to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task successfully deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "null",
+                                            "example": null
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/api/v1/tasks/search": {
+            "get": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Search tasks in Elasticsearch",
+                "description": "Search through the tasks based on various filters such as text, subject, and author ID with pagination.",
+                "operationId": "6e6f504f953f8732589bb47ab52e5e97",
+                "parameters": [
+                    {
+                        "name": "search_query",
+                        "in": "query",
+                        "description": "Query string to search across multiple fields.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "author_id",
+                        "in": "query",
+                        "description": "Filter results by author ID.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "subject",
+                        "in": "query",
+                        "description": "Filter results by subject.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "text",
+                        "in": "query",
+                        "description": "Filter results by text content.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Pagination offset.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the number of results returned.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful search operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "task_id": {
+                                                        "type": "string",
+                                                        "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                    },
+                                                    "subject": {
+                                                        "type": "string",
+                                                        "example": "laudantium"
+                                                    },
+                                                    "text": {
+                                                        "type": "string",
+                                                        "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                    },
+                                                    "answer": {
+                                                        "type": "string",
+                                                        "example": "nam"
+                                                    },
+                                                    "reason_comment": {
+                                                        "type": "string",
+                                                        "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
+                                                    },
+                                                    "author_id": {
+                                                        "type": "string",
+                                                        "format": "uuid",
+                                                        "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-04-14T16:45:53.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-04-14T16:45:53.000000Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "task_id": "2e8ad285-436c-3387-b4e8-31080551cdc2",
+                                                    "subject": "laudantium",
+                                                    "text": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet.",
+                                                    "answer": "nam",
+                                                    "reason_comment": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur",
+                                                    "author_id": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a",
+                                                    "created_at": "2024-04-14T16:45:53.000000Z",
+                                                    "updated_at": "2024-04-14T16:45:53.000000Z"
+                                                },
+                                                {
+                                                    "task_id": "2ef86cd6-ed9c-3d61-9a65-2f891a1ed813",
+                                                    "subject": "ullam",
+                                                    "text": "Eos aut quia quas autem eveniet. Voluptas delectus cupiditate enim enim veritatis et. Similique tempora fuga itaque debitis voluptate ut omnis.",
+                                                    "answer": "odio",
+                                                    "reason_comment": "illum sed omnis qui tempora consequatur et facere voluptatem cupiditate",
+                                                    "author_id": "4b84c22a-dc49-3aad-9693-c4ebc6af4e91",
+                                                    "created_at": "2024-04-14T16:45:53.000000Z",
+                                                    "updated_at": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            ]
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "offset": {
+                                                    "description": "Offset of the current result set.",
+                                                    "type": "integer"
+                                                },
+                                                "limit": {
+                                                    "description": "Number of items per page.",
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid search field"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/api/v1/tasks": {
+            "post": {
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create a new task",
+                "operationId": "bfb599f025fb708efa5d126f866885c8",
+                "requestBody": {
+                    "description": "Data for creating a new task",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "subject",
+                                    "text",
+                                    "answer",
+                                    "reason_comment",
+                                    "author_id"
+                                ],
+                                "properties": {
+                                    "subject": {
+                                        "type": "string",
+                                        "example": "laudantium"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                    },
+                                    "answer": {
+                                        "type": "string",
+                                        "example": "nam"
+                                    },
+                                    "author_id": {
+                                        "type": "string",
+                                        "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "task_id": {
+                                                    "type": "string",
+                                                    "example": "2e8ad285-436c-3387-b4e8-31080551cdc2"
+                                                },
+                                                "subject": {
+                                                    "type": "string",
+                                                    "example": "laudantium"
+                                                },
+                                                "text": {
+                                                    "type": "string",
+                                                    "example": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."
+                                                },
+                                                "answer": {
+                                                    "type": "string",
+                                                    "example": "nam"
+                                                },
+                                                "author_id": {
+                                                    "type": "string",
+                                                    "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-04-14T16:45:53.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "Missing required fields: subject, text"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

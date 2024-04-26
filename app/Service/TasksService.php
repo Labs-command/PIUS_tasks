@@ -16,6 +16,10 @@ class TasksService
      */
     public function get($id): array
     {
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if(!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
         $params = [
             "index" => "tasks-index",
             "id" => $id
@@ -146,9 +150,6 @@ class TasksService
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     public function create($request)
     {
         $column_names = ["subject", "text", "answer", "author_id"];

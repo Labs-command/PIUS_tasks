@@ -96,33 +96,6 @@ class ReportedTasksService
 
     }
 
-    //    public function replace($taskId, $request)
-    //    {
-    //        try{
-    //            $task = ReportedTask::find($taskId);
-    //
-    //            if (!$task) {
-    //                return ['error'=>404, 'message'=>"Task not found"];
-    //            }
-    //
-    //
-    //            $task->update([
-    //                'subject' => $request->subject,
-    //                'text' => $request->input('text', 'test'),
-    //                'answer' => $request->input('answer', 'test'),
-    //                'reason_comment' => $request->input('reason_comment', null),
-    //                'author_id' => $request->input('author_id', 'e63a652c-b216-3656-a05f-e0bcd7a772b1'),
-    //            ]);
-    //
-    //            $task->save();
-    //
-    //            return $task;
-    //        }catch (\Exception $e){
-    //            Log::channel('errorlog')->error($e->getMessage());
-    //            return ['code' => 500, 'message' => "User update error"];
-    //        }
-    //
-    //    }
     public function patch($taskId, $request): array
     {
         try {

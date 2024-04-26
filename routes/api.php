@@ -21,7 +21,6 @@ Route::prefix('/reported-tasks')->group(
         Route::get('/{id}', [ReportedTaskController::class, 'get']);
         Route::post('/search', [ReportedTaskController::class, 'search']);
         Route::post('/', [ReportedTaskController::class, 'create']);
-        //Route::put('/{id}', [ReportedTaskController::class, 'replace']);
         Route::patch('/{id}', [ReportedTaskController::class, 'patch']);
         Route::delete('/{id}', [ReportedTaskController::class, 'delete']);
 
