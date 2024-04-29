@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Http\Resources\ReportedTaskResource;
+use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Models\ReportedTask;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +14,7 @@ class ReportedTasksService
     /**
      * @throws Exception
      */
-    public function search($request): Collection|array
+    public function search($request): ReportedTaskResourceCollection
     {
         $query = ReportedTask::query();
 
@@ -45,30 +47,32 @@ class ReportedTasksService
             'offset' => $offset,
             'limit' => $limit]];
 
-        return $response;
+        $tasks = $query->get();
+        return new ReportedTaskResourceCollection($tasks, compact("offset", "limit"));
     }
 
     /**
      * @throws Exception
      */
-    public function get($id)
+    public function get($id): ReportedTaskResource
     {
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
 
         try {
-            $task = ReportedTask::find($id);
-            if (!$task) {
-                throw new Exception("Task not found", 404);
-            }
-            return ['data' => $task];
+            $task = ReportedTask::findOrFail($id);
+            return new ReportedTaskResource($task);
         } catch (Exception $e) {
-            throw new Exception("Invalid uuid", 400);
+            throw new Exception("Task not found", 404);
         }
     }
 
     /**
      * @throws Exception
      */
-    public function create($request): array
+    public function create($request): ReportedTaskResource
     {
         $fieldsToCheck = $request->keys();
 
@@ -92,11 +96,11 @@ class ReportedTasksService
                 'author_id' => $request->author_id,
             ]
         );
-        return ['data' => $task];
+        return new ReportedTaskResource($task);
 
     }
 
-    public function patch($taskId, $request): array
+    public function patch($taskId, $request): ReportedTaskResource
     {
         try {
             $task = ReportedTask::find($taskId);
@@ -116,13 +120,20 @@ class ReportedTasksService
         }
 
         $task->update($request->except('id'));
-        return ['data' => $task];
+        return new ReportedTaskResource($task);
     }
 
-    public function delete($id)
+    /**
+     * @throws Exception
+     */
+    public function delete($id): \Illuminate\Http\JsonResponse
     {
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
         ReportedTask::destroy($id);
-        return ['data' => null];
+        return response()->json(["data" => null]);
 
     }
 
