@@ -6,7 +6,6 @@ use App\Http\Resources\ReportedTaskResource;
 use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Models\ReportedTask;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Schema;
 
 class ReportedTasksService
