@@ -19,7 +19,8 @@
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "phpunit/phpunit": "^10.1",
+        "pestphp/pest": "^2.34",
+        "pestphp/pest-plugin-laravel": "^2.4",
         "spatie/laravel-ignition": "^2.0",
         "squizlabs/php_codesniffer": "*"
     },
