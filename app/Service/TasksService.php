@@ -150,7 +150,10 @@ class TasksService
         ];
     }
 
-    public function create($request)
+    /**
+     * @throws Exception
+     */
+    public function create($request): array
     {
         $column_names = ["subject", "text", "answer", "author_id"];
 
@@ -163,7 +166,7 @@ class TasksService
 
         $missingFields = array_diff($column_names, $request->keys());
         if (count($missingFields) > 0) {
-            throw new \Exception("Missing required fields: " . implode(', ', $missingFields), 400);
+            throw new Exception("Missing required fields: " . implode(', ', $missingFields), 400);
         }
 
         $uuid = Uuid::uuid4()->toString();
@@ -195,6 +198,11 @@ class TasksService
      */
     public function delete($id): array
     {
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if(!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
+
         $params = [
             "index" => "tasks-index",
             "id" => $id
