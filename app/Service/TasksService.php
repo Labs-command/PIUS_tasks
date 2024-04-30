@@ -31,7 +31,7 @@ class TasksService
             $taskBody = $task['_source'];
 
             $task = [
-                "id" => $taskId,
+                "task_id" => $taskId,
             ];
 
             $task = array_merge($task, $taskBody);
@@ -50,6 +50,8 @@ class TasksService
 
         $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
+        $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
+        $sortField = $request->has('sort_field') ? $request->input('sort_field') : "date_added";
 
         global $params;
         $must = [];
@@ -86,8 +88,11 @@ class TasksService
                             ]
 
                         ]
+                    ],
+                    'sort' => [
+                        [$sortField => ['order' => $sortOrder]]
                     ]
-                ]
+                ],
             ];
         } else {
 
@@ -125,8 +130,12 @@ class TasksService
                         'bool' => [
                             'must' => $must
                         ]
+                    ],
+                    'sort' => [
+                        [$sortField => ['order' => $sortOrder]]
                     ]
-                ]
+                ],
+
             ];
         }
 
@@ -137,7 +146,7 @@ class TasksService
             $taskBody = $tasks[$i]['_source'];
 
             $tasks[$i] = [
-                "id" => $taskId,
+                "task_id" => $taskId,
             ];
 
             $tasks[$i] = array_merge($tasks[$i], $taskBody);
