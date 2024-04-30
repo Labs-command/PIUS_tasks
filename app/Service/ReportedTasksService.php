@@ -5,8 +5,10 @@ namespace App\Service;
 use App\Http\Resources\ReportedTaskResource;
 use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Models\ReportedTask;
+use Elasticsearch\ClientBuilder;
 use Exception;
 use Illuminate\Support\Facades\Schema;
+use Ramsey\Uuid\Uuid;
 
 class ReportedTasksService
 {
@@ -17,19 +19,14 @@ class ReportedTasksService
     {
         $query = ReportedTask::query();
 
-        if ($request->has('search_field') && $request->has('search_value')) {
-
-            if (Schema::hasColumn('reported_tasks', $request->search_field)) {
-                $query->where($request->input('search_field'), 'like', '%' . $request->input('search_value') . '%');
-            } else {
-                throw new Exception("Invalid search field", 400);
-            }
+        if ($request->has('search_value')) {
+            $query->where('subject', 'like', '%' . $request->input('search_value') . '%');
         }
 
         $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
-        if ($request->has('sort_field')) {
+        if ($request->has('sort_field') && $request->input('sort_field')) {
             $sortField = $request->input('sort_field');
-            if (Schema::hasColumn('reported_tasks', $sortField)) {
+            if ($sortOrder == "asc" || $sortOrder == "desc") {
                 $query->orderBy($sortField, $sortOrder);
             } else {
                 throw new Exception("Invalid sort field", 400);
@@ -60,6 +57,42 @@ class ReportedTasksService
         } catch (Exception $e) {
             throw new Exception("Task not found", 404);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function confirm($id): bool
+    {
+
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
+
+        $task = ReportedTask::findOrFail($id);
+        $uuid = Uuid::uuid4()->toString();
+
+        $params = [
+            'index' => 'tasks-index',
+            'id' => $uuid,
+            'body' => [
+                'subject' => $task->subject,
+                'text' => $task->text,
+                'answer' => $task->answer,
+                'author_id' => $task->author_id,
+                'created_at' => $task->created_at,
+            ]
+        ];
+
+        $response = ClientBuilder::create()->build()->index($params);
+        if(array_key_exists('error', $response) && $response['error']) {
+            throw new Exception($response["error"]);
+        }
+
+        $this::delete($id);
+
+        return true;
     }
 
     /**
