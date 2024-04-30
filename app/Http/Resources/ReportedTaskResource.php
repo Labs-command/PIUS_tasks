@@ -21,8 +21,8 @@ class ReportedTaskResource extends JsonResource
             "answer" => $this->answer,
             "reason_comment" => $this->reason_comment,
             "author_id" => $this->author_id,
+            "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "created_at" => $this->created_at
         ];
     }
 }
