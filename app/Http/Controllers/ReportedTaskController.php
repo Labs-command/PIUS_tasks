@@ -89,14 +89,13 @@ class ReportedTaskController extends Controller
      * @OA\Items(
      *                      type="object",
      *                      properties={
-     * @OA\Property(property="task_id",        type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
-     * @OA\Property(property="subject",        type="string", example="laudantium"),
-     * @OA\Property(property="text",           type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
-     * @OA\Property(property="answer",         type="string", example="nam"),
-     * @OA\Property(property="reason_comment", type="string", example="laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"),
-     * @OA\Property(property="author_id",      type="string", format="uuid", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
-     * @OA\Property(property="created_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
-     * @OA\Property(property="updated_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
+     * @OA\Property(property="task_id",      type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
+     * @OA\Property(property="subject",      type="string", example="laudantium"),
+     * @OA\Property(property="text",         type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
+     * @OA\Property(property="answer",       type="string", example="nam"),
+     * @OA\Property(property="author_id",    type="string", format="uuid", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
+     * @OA\Property(property="created_at",   type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
+     * @OA\Property(property="updated_at",   type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
      *                      }
      *                  ),
      *                  example={
@@ -105,7 +104,7 @@ class ReportedTaskController extends Controller
      *                          "subject": "laudantium",
      *                          "text": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet.",
      *                          "answer": "nam",
-     *                          "reason_comment": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur",
+     *
      *                          "author_id": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a",
      *                          "created_at": "2024-04-14T16:45:53.000000Z",
      *                          "updated_at": "2024-04-14T16:45:53.000000Z"
@@ -115,7 +114,6 @@ class ReportedTaskController extends Controller
      *                          "subject": "ullam",
      *                          "text": "Eos aut quia quas autem eveniet. Voluptas delectus cupiditate enim enim veritatis et. Similique tempora fuga itaque debitis voluptate ut omnis.",
      *                          "answer": "odio",
-     *                          "reason_comment": "illum sed omnis qui tempora consequatur et facere voluptatem cupiditate",
      *                          "author_id": "4b84c22a-dc49-3aad-9693-c4ebc6af4e91",
      *                          "created_at": "2024-04-14T16:45:53.000000Z",
      *                          "updated_at": "2024-04-14T16:45:53.000000Z"
@@ -126,11 +124,11 @@ class ReportedTaskController extends Controller
      *                  property="meta",
      *                  type="object",
      *                  properties={
-     * @OA\Property(property="search_field",   type="string", example="subject"),
-     * @OA\Property(property="search_value",   type="string", example="explicabo"),
-     * @OA\Property(property="sort_order",     type="string", example="asc"),
-     * @OA\Property(property="offset",         type="integer", example=0),
-     * @OA\Property(property="limit",          type="integer", example=10)
+     * @OA\Property(property="search_field", type="string", example="subject"),
+     * @OA\Property(property="search_value", type="string", example="explicabo"),
+     * @OA\Property(property="sort_order",   type="string", example="asc"),
+     * @OA\Property(property="offset",       type="integer", example=0),
+     * @OA\Property(property="limit",        type="integer", example=10)
      *                  }
      *              )
      *          )
@@ -140,7 +138,7 @@ class ReportedTaskController extends Controller
      *         description="Invalid search or sort field",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",         type="string", example="Invalid search field")
+     * @OA\Property(property="errors",       type="string", example="Invalid search field")
      *         ),
      *
      *     ),
@@ -149,7 +147,7 @@ class ReportedTaskController extends Controller
      *           description="Internal Server Error",
      * @OA\JsonContent(
      *               type="object",
-     * @OA\Property(property="errors",         type="string", example="An unexpected error occurred")
+     * @OA\Property(property="errors",       type="string", example="An unexpected error occurred")
      *           )
      *       )
      * )
@@ -187,15 +185,14 @@ class ReportedTaskController extends Controller
      *        description="Successful retrieval of the reported task",
      * @OA\JsonContent(
      *            type="object",
-     * @OA\Property(property="data",           type="object",
-     * @OA\Property(property="task_id",        type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
-     * @OA\Property(property="subject",        type="string", example="laudantium"),
-     * @OA\Property(property="text",           type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
-     * @OA\Property(property="answer",         type="string", example="nam"),
-     * @OA\Property(property="reason_comment", type="string", example="laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"),
-     * @OA\Property(property="author_id",      type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
-     * @OA\Property(property="created_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
-     * @OA\Property(property="updated_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
+     * @OA\Property(property="data",       type="object",
+     * @OA\Property(property="task_id",    type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
+     * @OA\Property(property="subject",    type="string", example="laudantium"),
+     * @OA\Property(property="text",       type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
+     * @OA\Property(property="answer",     type="string", example="nam"),
+     * @OA\Property(property="author_id",  type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
      *            )
      *        )
      *    ),
@@ -204,7 +201,7 @@ class ReportedTaskController extends Controller
      *          description="Invalid UUID format",
      * @OA\JsonContent(
      *              type="object",
-     * @OA\Property(property="errors",         type="string", example="Invalid UUID format")
+     * @OA\Property(property="errors",     type="string", example="Invalid UUID format")
      *          )
      *      ),
      * @OA\Response(
@@ -212,7 +209,7 @@ class ReportedTaskController extends Controller
      *        description="Task not found",
      * @OA\JsonContent(
      *            type="object",
-     * @OA\Property(property="errors",         type="string", example="Task not found")
+     * @OA\Property(property="errors",     type="string", example="Task not found")
      *        )
      *    ),
      * @OA\Response(
@@ -220,7 +217,7 @@ class ReportedTaskController extends Controller
      *          description="Internal Server Error",
      * @OA\JsonContent(
      *              type="object",
-     * @OA\Property(property="errors",         type="string", example="An unexpected error occurred")
+     * @OA\Property(property="errors",     type="string", example="An unexpected error occurred")
      *          )
      *      )
      * )
@@ -258,12 +255,11 @@ class ReportedTaskController extends Controller
      *         required=true,
      *         description="Data for creating a new reported task",
      * @OA\JsonContent(
-     *             required={"subject", "text", "answer", "reason_comment", "author_id"},
-     * @OA\Property(property="subject",        type="string", example="laudantium"),
-     * @OA\Property(property="text",           type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
-     * @OA\Property(property="answer",         type="string", example="nam"),
-     * @OA\Property(property="reason_comment", type="string", example="laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"),
-     * @OA\Property(property="author_id",      type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
+     *             required={"subject", "text", "answer", "author_id"},
+     * @OA\Property(property="subject",    type="string", example="laudantium"),
+     * @OA\Property(property="text",       type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
+     * @OA\Property(property="answer",     type="string", example="nam"),
+     * @OA\Property(property="author_id",  type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
      *         )
      *     ),
      * @OA\Response(
@@ -271,15 +267,14 @@ class ReportedTaskController extends Controller
      *         description="Task created successfully",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="data",           type="object",
-     * @OA\Property(property="task_id",        type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
-     * @OA\Property(property="subject",        type="string", example="laudantium"),
-     * @OA\Property(property="text",           type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
-     * @OA\Property(property="answer",         type="string", example="nam"),
-     * @OA\Property(property="reason_comment", type="string", example="laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"),
-     * @OA\Property(property="author_id",      type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
-     * @OA\Property(property="created_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
-     * @OA\Property(property="updated_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
+     * @OA\Property(property="data",       type="object",
+     * @OA\Property(property="task_id",    type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
+     * @OA\Property(property="subject",    type="string", example="laudantium"),
+     * @OA\Property(property="text",       type="string", example="Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet."),
+     * @OA\Property(property="answer",     type="string", example="nam"),
+     * @OA\Property(property="author_id",  type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
      *             )
      *         )
      *     ),
@@ -288,7 +283,7 @@ class ReportedTaskController extends Controller
      *         description="Validation error",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",         type="string", example="Missing required fields: subject, text")
+     * @OA\Property(property="errors",     type="string", example="Missing required fields: subject, text")
      *         )
      *     ),
      * @OA\Response(
@@ -296,7 +291,7 @@ class ReportedTaskController extends Controller
      *           description="Internal Server Error",
      * @OA\JsonContent(
      *               type="object",
-     * @OA\Property(property="errors",         type="string", example="An unexpected error occurred")
+     * @OA\Property(property="errors",     type="string", example="An unexpected error occurred")
      *           )
      *     )
      * )
@@ -331,8 +326,8 @@ class ReportedTaskController extends Controller
      *         description="Partial data of the reported task to update",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="text",           type="string", example="Updated detailed description of the task."),
-     * @OA\Property(property="answer",         type="string", example="Updated initial answer to the task."),
+     * @OA\Property(property="text",       type="string", example="Updated detailed description of the task."),
+     * @OA\Property(property="answer",     type="string", example="Updated initial answer to the task."),
      *         )
      *     ),
      * @OA\Response(
@@ -340,15 +335,14 @@ class ReportedTaskController extends Controller
      *         description="Task updated successfully",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="data",           type="object",
-     * @OA\Property(property="task_id",        type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
-     * @OA\Property(property="subject",        type="string", example="Initilal Subject"),
-     * @OA\Property(property="text",           type="string", example="Updated detailed description of the task."),
-     * @OA\Property(property="answer",         type="string", example="Updated answer to the task."),
-     * @OA\Property(property="reason_comment", type="string", example="Initial reason for creating the task."),
-     * @OA\Property(property="author_id",      type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
-     * @OA\Property(property="created_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
-     * @OA\Property(property="updated_at",     type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
+     * @OA\Property(property="data",       type="object",
+     * @OA\Property(property="task_id",    type="string", example="2e8ad285-436c-3387-b4e8-31080551cdc2"),
+     * @OA\Property(property="subject",    type="string", example="Initilal Subject"),
+     * @OA\Property(property="text",       type="string", example="Updated detailed description of the task."),
+     * @OA\Property(property="answer",     type="string", example="Updated answer to the task."),
+     * @OA\Property(property="author_id",  type="string", example="cabf0ff5-4e77-34c7-9ab2-64745907cf1a"),
+     * @OA\Property(property="created_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z"),
+     * @OA\Property(property="updated_at", type="string", format="date-time", example="2024-04-14T16:45:53.000000Z")
      *             )
      *         )
      *
@@ -358,7 +352,7 @@ class ReportedTaskController extends Controller
      *         description="Invalid input, object invalid",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",         type="string", example="Field 'xyz' does not exist in the database table")
+     * @OA\Property(property="errors",     type="string", example="Field 'xyz' does not exist in the database table")
      *         )
      *     ),
      * @OA\Response(
@@ -366,7 +360,7 @@ class ReportedTaskController extends Controller
      *         description="Task not found",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",         type="string", example="Task not found")
+     * @OA\Property(property="errors",     type="string", example="Task not found")
      *         )
      *     ),
      * @OA\Response(
@@ -374,7 +368,7 @@ class ReportedTaskController extends Controller
      *         description="Internal server error",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",         type="string", example="An unexpected error occurred")
+     * @OA\Property(property="errors",     type="string", example="An unexpected error occurred")
      *         )
      *     )
      * )
