@@ -7,6 +7,7 @@ use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Models\ReportedTask;
 use Elasticsearch\ClientBuilder;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Schema;
 use Ramsey\Uuid\Uuid;
 
@@ -152,7 +153,7 @@ class ReportedTasksService
     /**
      * @throws Exception
      */
-    public function delete($id): \Illuminate\Http\JsonResponse
+    public function delete($id): JsonResponse
     {
         $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
         if (!preg_match($pattern, $id)) {
