@@ -22,7 +22,6 @@ class ReportedTaskFactory extends Factory
             'subject' => $this->faker->words(1, true),
             'text' =>  $this->faker->text,
             'answer' =>  $this->faker->words(1, true),
-            'reason_comment' =>  $this->faker->words(10, true),
             'author_id' => $this->faker->uuid(),
         ];
     }

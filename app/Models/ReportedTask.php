@@ -13,7 +13,6 @@ class ReportedTask extends Model
         'subject',
         'text',
         'answer',
-        'reason_comment',
         'author_id',
     ];
 
