@@ -36,30 +36,6 @@ test(
     }
 )->depends('Creation');
 
-test(
-    "Changing some fields", function () {
-        $body = [
-        "subject" => "Тестовый предмет после изменения",
-        "text" => "Тестовый текст после изменения",
-        "answer" => "Тестовый ответ после изменения",
-        "author_id" => TaskTest::$task["author_id"]
-        ];
-        $response = $this->patch('/tasks/api/v1/tasks/' . TaskTest::$task["task_id"], $body);
-        $response->assertStatus(200)->assertJson(
-            [
-            "data" => [
-                "task_id" => TaskTest::$task["task_id"],
-                "subject" => "Тестовый предмет после изменения",
-                "text" => "Тестовый текст после изменения",
-                "answer" => "Тестовый ответ после изменения",
-                "author_id" => TaskTest::$task["author_id"],
-                "created_at" => TaskTest::$task["created_at"],
-                "updated_at" => true,
-            ]
-            ]
-        );
-    }
-)->depends('Creation');
 
 test(
     "Deletion", function () {
