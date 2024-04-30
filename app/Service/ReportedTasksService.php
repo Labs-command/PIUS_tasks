@@ -108,7 +108,7 @@ class ReportedTasksService
             }
         }
 
-        $missingFields = array_diff(["subject", "text", "answer", "reason_comment", "author_id"], $request->keys());
+        $missingFields = array_diff(["subject", "text", "answer", "author_id"], $request->keys());
         if (count($missingFields) > 0) {
             throw new \Exception("Missing required fields: " . implode(', ', $missingFields), 400);
         }
@@ -118,7 +118,6 @@ class ReportedTasksService
                 'subject' => $request->subject,
                 'text' => $request->text,
                 'answer' => $request->answer,
-                'reason_comment' => $request->reason_comment,
                 'author_id' => $request->author_id,
             ]
         );
