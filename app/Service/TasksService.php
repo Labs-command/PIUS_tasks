@@ -31,7 +31,7 @@ class TasksService
             $taskBody = $task['_source'];
 
             $task = [
-                "id" => $taskId,
+                "task_id" => $taskId,
             ];
 
             $task = array_merge($task, $taskBody);
@@ -146,7 +146,7 @@ class TasksService
             $taskBody = $tasks[$i]['_source'];
 
             $tasks[$i] = [
-                "id" => $taskId,
+                "task_id" => $taskId,
             ];
 
             $tasks[$i] = array_merge($tasks[$i], $taskBody);
