@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Service\ReportedTasksService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class ReportedTaskController extends Controller
@@ -156,6 +157,7 @@ class ReportedTaskController extends Controller
     public function search(Request $request): \App\Http\Resources\ReportedTaskResourceCollection|JsonResponse
     {
         try {
+
             return $this->reportedTasksService->search($request);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
