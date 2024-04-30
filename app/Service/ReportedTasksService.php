@@ -35,15 +35,7 @@ class ReportedTasksService
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
         $query->offset($offset)->limit($limit);
 
-//        $response = ['data' => $query->get(), 'meta' => ['search_field' => $request->search_field,
-//            'search_value' => $request->search_value,
-//            'sort_order' => $sortOrder,
-//            'offset' => $offset,
-//            'limit' => $limit
-//        ]];
-
         $tasks = $query->get();
-//        dumps($tasks);
         return new ReportedTaskResourceCollection($tasks, compact("offset", "limit"));
     }
 
