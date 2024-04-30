@@ -29,7 +29,7 @@ class ReportedTasksService
         $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
         if ($request->has('sort_field')) {
             $sortField = $request->input('sort_field');
-            if ($sortField == "asc" || $sortField == "desc") {
+            if (Schema::hasColumn('reported_tasks', $sortField)) {
                 $query->orderBy($sortField, $sortOrder);
             } else {
                 throw new Exception("Invalid sort field", 400);
@@ -39,12 +39,6 @@ class ReportedTasksService
         $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
         $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
         $query->offset($offset)->limit($limit);
-
-        $response = ['data' => $query->get(), 'meta' => ['search_field' => $request->search_field,
-            'search_value' => $request->search_value,
-            'sort_order' => $sortOrder,
-            'offset' => $offset,
-            'limit' => $limit]];
 
         $tasks = $query->get();
         return new ReportedTaskResourceCollection($tasks, compact("offset", "limit"));
