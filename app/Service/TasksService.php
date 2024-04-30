@@ -178,6 +178,11 @@ class TasksService
             throw new Exception("Missing required fields: " . implode(', ', $missingFields), 400);
         }
 
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $request->author_id)) {
+            throw new Exception("Invalid author_id uuid", 400);
+        }
+
         $uuid = Uuid::uuid4()->toString();
         $now = Carbon::now(new \DateTimeZone('UTC'));
         $formattedDate = $now->format('Y-m-d\TH:i:s.u\Z');
