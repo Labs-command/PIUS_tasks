@@ -3,11 +3,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReportedTaskResource;
+use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Service\ReportedTasksService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
 
 class ReportedTaskController extends Controller
 {
@@ -154,7 +154,7 @@ class ReportedTaskController extends Controller
      *       )
      * )
      */
-    public function search(Request $request): \App\Http\Resources\ReportedTaskResourceCollection|JsonResponse
+    public function search(Request $request): ReportedTaskResourceCollection|JsonResponse
     {
         try {
 
@@ -225,10 +225,23 @@ class ReportedTaskController extends Controller
      *      )
      * )
      */
-    public function get($id): \App\Http\Resources\ReportedTaskResource|JsonResponse
+    public function get($id): ReportedTaskResource|JsonResponse
     {
         try {
             return $this->reportedTasksService->get($id);
+        } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            return response()->json(['errors' => $e->getMessage()], $statusCode);
+        }
+
+    }
+
+    public function confirm($id): ReportedTaskResource|JsonResponse
+    {
+        try {
+            $result = $this->reportedTasksService->confirm($id);
+
+            return response()->json(['success' => $result], 200);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
@@ -288,7 +301,7 @@ class ReportedTaskController extends Controller
      *     )
      * )
      */
-    public function create(Request $request):\App\Http\Resources\ReportedTaskResource|JsonResponse
+    public function create(Request $request): ReportedTaskResource|JsonResponse
     {
         try {
             return $this->reportedTasksService->create($request);
@@ -366,7 +379,7 @@ class ReportedTaskController extends Controller
      *     )
      * )
      */
-    public function patch($id, Request $request):\App\Http\Resources\ReportedTaskResource|JsonResponse
+    public function patch($id, Request $request): ReportedTaskResource|JsonResponse
     {
         try {
             return $this->reportedTasksService->patch($id, $request);

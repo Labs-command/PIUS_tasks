@@ -188,9 +188,10 @@ class TasksService
 
         $response = ClientBuilder::create()->build()->index($params);
 
+        if(array_key_exists('error', $response) && $response['error']) {
+            throw new Exception($response["error"]);
+        }
         return $this->get($response["_id"]);
-
-
     }
 
     /**

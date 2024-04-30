@@ -5,8 +5,10 @@ namespace App\Service;
 use App\Http\Resources\ReportedTaskResource;
 use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Models\ReportedTask;
+use Elasticsearch\ClientBuilder;
 use Exception;
 use Illuminate\Support\Facades\Schema;
+use Ramsey\Uuid\Uuid;
 
 class ReportedTasksService
 {
@@ -55,6 +57,42 @@ class ReportedTasksService
         } catch (Exception $e) {
             throw new Exception("Task not found", 404);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function confirm($id): bool
+    {
+
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $id)) {
+            throw new Exception("Invalid uuid", 400);
+        }
+
+        $task = ReportedTask::findOrFail($id);
+        $uuid = Uuid::uuid4()->toString();
+
+        $params = [
+            'index' => 'tasks-index',
+            'id' => $uuid,
+            'body' => [
+                'subject' => $task->subject,
+                'text' => $task->text,
+                'answer' => $task->answer,
+                'author_id' => $task->author_id,
+                'created_at' => $task->created_at,
+            ]
+        ];
+
+        $response = ClientBuilder::create()->build()->index($params);
+        if(array_key_exists('error', $response) && $response['error']) {
+            throw new Exception($response["error"]);
+        }
+
+        $this::delete($id);
+
+        return true;
     }
 
     /**
