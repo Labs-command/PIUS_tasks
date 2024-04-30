@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Elastic;
 use Elasticsearch\ClientBuilder;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 
@@ -48,10 +49,10 @@ class TasksService
     public function search($request): array
     {
 
-        $offset = $request->has('offset') ? intval($request->input('offset')) : 0;
-        $limit = $request->has('limit') ? intval($request->input('limit')) : 10;
-        $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
-        $sortField = $request->has('sort_field') ? $request->input('sort_field') : "date_added";
+        $offset = $request->filled('offset') ? intval($request->input('offset')) : 0;
+        $limit = $request->filled('limit') ? intval($request->input('limit')) : 10;
+        $sortOrder = $request->filled('sort_order') ? $request->input('sort_order') : "asc";
+        $sortField = $request->filled('sort_field') ? $request->input('sort_field') : "date_added";
 
         global $params;
         $must = [];
