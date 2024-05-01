@@ -4,10 +4,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ReportedTaskResource;
-use App\Http\Resources\ReportedTaskResourceCollection;
 use App\Service\ReportedTasksService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
+
 
 class ReportedTaskController extends Controller
 {
@@ -154,12 +156,12 @@ class ReportedTaskController extends Controller
      *       )
      * )
      */
-    public function search(Request $request): ReportedTaskResourceCollection|JsonResponse
+    public function search(Request $request): \App\Http\Resources\ReportedTaskResourceCollection|JsonResponse
     {
         try {
 
             return $this->reportedTasksService->search($request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -229,7 +231,7 @@ class ReportedTaskController extends Controller
     {
         try {
             return $this->reportedTasksService->get($id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -241,8 +243,8 @@ class ReportedTaskController extends Controller
         try {
             $result = $this->reportedTasksService->confirm($id);
 
-            return response()->json(['success' => $result], 200);
-        } catch (\Exception $e) {
+            return response()->json(['success' => $result]);
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -305,7 +307,7 @@ class ReportedTaskController extends Controller
     {
         try {
             return $this->reportedTasksService->create($request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -383,7 +385,7 @@ class ReportedTaskController extends Controller
     {
         try {
             return $this->reportedTasksService->patch($id, $request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
@@ -417,7 +419,7 @@ class ReportedTaskController extends Controller
     {
         try {
             return $this->reportedTasksService->delete($id);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             return response()->json(['errors' => $e->getMessage()], $statusCode);
         }
