@@ -104,10 +104,6 @@
                                                         "type": "string",
                                                         "example": "nam"
                                                     },
-                                                    "reason_comment": {
-                                                        "type": "string",
-                                                        "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
-                                                    },
                                                     "author_id": {
                                                         "type": "string",
                                                         "format": "uuid",
@@ -132,7 +128,6 @@
                                                     "subject": "laudantium",
                                                     "text": "Optio porro est amet dolore. Voluptatibus qui deserunt unde veritatis cum maiores eveniet.",
                                                     "answer": "nam",
-                                                    "reason_comment": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur",
                                                     "author_id": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a",
                                                     "created_at": "2024-04-14T16:45:53.000000Z",
                                                     "updated_at": "2024-04-14T16:45:53.000000Z"
@@ -142,7 +137,6 @@
                                                     "subject": "ullam",
                                                     "text": "Eos aut quia quas autem eveniet. Voluptas delectus cupiditate enim enim veritatis et. Similique tempora fuga itaque debitis voluptate ut omnis.",
                                                     "answer": "odio",
-                                                    "reason_comment": "illum sed omnis qui tempora consequatur et facere voluptatem cupiditate",
                                                     "author_id": "4b84c22a-dc49-3aad-9693-c4ebc6af4e91",
                                                     "created_at": "2024-04-14T16:45:53.000000Z",
                                                     "updated_at": "2024-04-14T16:45:53.000000Z"
@@ -259,10 +253,6 @@
                                                 "answer": {
                                                     "type": "string",
                                                     "example": "nam"
-                                                },
-                                                "reason_comment": {
-                                                    "type": "string",
-                                                    "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
                                                 },
                                                 "author_id": {
                                                     "type": "string",
@@ -438,10 +428,6 @@
                                                     "type": "string",
                                                     "example": "Updated answer to the task."
                                                 },
-                                                "reason_comment": {
-                                                    "type": "string",
-                                                    "example": "Initial reason for creating the task."
-                                                },
                                                 "author_id": {
                                                     "type": "string",
                                                     "example": "cabf0ff5-4e77-34c7-9ab2-64745907cf1a"
@@ -533,7 +519,6 @@
                                     "subject",
                                     "text",
                                     "answer",
-                                    "reason_comment",
                                     "author_id"
                                 ],
                                 "properties": {
@@ -548,10 +533,6 @@
                                     "answer": {
                                         "type": "string",
                                         "example": "nam"
-                                    },
-                                    "reason_comment": {
-                                        "type": "string",
-                                        "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
                                     },
                                     "author_id": {
                                         "type": "string",
@@ -587,10 +568,6 @@
                                                 "answer": {
                                                     "type": "string",
                                                     "example": "nam"
-                                                },
-                                                "reason_comment": {
-                                                    "type": "string",
-                                                    "example": "laudantium suscipit aut praesentium ut itaque enim qui rerum consequuntur"
                                                 },
                                                 "author_id": {
                                                     "type": "string",
