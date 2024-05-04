@@ -29,13 +29,6 @@ class ReportedTaskController extends Controller
      *     summary="Search for reported tasks",
      *     description="Search through the reported tasks with optional sorting and pagination.if the search field is empty, then all entries are displayed!!!",
      * @OA\Parameter(
-     *         name="search_field",
-     *         in="query",
-     *         description="Field name to search by",
-     *         required=false,
-     * @OA\Schema(type="string")
-     *     ),
-     * @OA\Parameter(
      *         name="search_value",
      *         in="query",
      *         description="Value of the field to search for",
@@ -126,7 +119,6 @@ class ReportedTaskController extends Controller
      *                  property="meta",
      *                  type="object",
      *                  properties={
-     * @OA\Property(property="search_field", type="string", example="subject"),
      * @OA\Property(property="search_value", type="string", example="explicabo"),
      * @OA\Property(property="sort_order",   type="string", example="asc"),
      * @OA\Property(property="offset",       type="integer", example=0),
@@ -137,10 +129,10 @@ class ReportedTaskController extends Controller
      *      ),
      * @OA\Response(
      *         response=400,
-     *         description="Invalid search or sort field",
+     *         description="Invalid sort field",
      * @OA\JsonContent(
      *             type="object",
-     * @OA\Property(property="errors",       type="string", example="Invalid search field")
+     * @OA\Property(property="errors",       type="string", example="Invalid sort field")
      *         ),
      *
      *     ),
@@ -265,8 +257,8 @@ class ReportedTaskController extends Controller
      *         )
      *     ),
      * @OA\Response(
-     *         response=200,
-     *         description="Task created successfully",
+     *         response=201,
+     *         description="Reported task created successfully",
      * @OA\JsonContent(
      *             type="object",
      * @OA\Property(property="data",       type="object",
