@@ -263,8 +263,8 @@ class ReportedTaskController extends Controller
      *         )
      *     ),
      * @OA\Response(
-     *         response=200,
-     *         description="Task created successfully",
+     *         response=201,
+     *         description="Reported task created successfully",
      * @OA\JsonContent(
      *             type="object",
      * @OA\Property(property="data",       type="object",

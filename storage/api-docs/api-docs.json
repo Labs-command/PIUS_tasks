@@ -545,8 +545,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Task created successfully",
+                    "201": {
+                        "description": "Reported task created successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
