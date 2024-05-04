@@ -23,13 +23,18 @@ class ReportedTasksService
             $query->where('subject', 'like', '%' . $request->input('search_value') . '%');
         }
 
+        if(!Schema::hasColumn("reported_tasks", $request->input("sort_field"))) {
+            throw new Exception("Invalid sort field", 400);
+        }
+
         $sortOrder = $request->has('sort_order') ? $request->input('sort_order') : "asc";
+
         if ($request->has('sort_field') && $request->input('sort_field')) {
             $sortField = $request->input('sort_field');
             if ($sortOrder == "asc" || $sortOrder == "desc") {
                 $query->orderBy($sortField, $sortOrder);
             } else {
-                throw new Exception("Invalid sort field", 400);
+                throw new Exception("Invalid sort order", 400);
             }
         }
 
@@ -132,14 +137,15 @@ class ReportedTasksService
 
     public function patch($taskId, $request): ReportedTaskResource
     {
-        try {
-            $task = ReportedTask::find($taskId);
-            if (!$task) {
-                throw new Exception("Task not found", 404);
-            }
-        } catch (Exception $e) {
+        $pattern = '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/';
+        if (!preg_match($pattern, $taskId)) {
             throw new Exception("Invalid uuid", 400);
         }
+        $task = ReportedTask::find($taskId);
+        if (!$task) {
+            throw new Exception("Task not found", 404);
+        }
+
 
         $fieldsToCheck = $request->keys();
 
