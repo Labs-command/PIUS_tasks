@@ -1,10 +1,7 @@
 <?php
 
-class TaskTest
-{
-    public static $task;
-}
 
+use Tests\Feature\TaskTest;
 
 test(
     'Creation', function () {

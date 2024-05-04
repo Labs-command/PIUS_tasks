@@ -16,15 +16,6 @@
                 "operationId": "searchReportedTasks",
                 "parameters": [
                     {
-                        "name": "search_field",
-                        "in": "query",
-                        "description": "Field name to search by",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "search_value",
                         "in": "query",
                         "description": "Value of the field to search for",
@@ -145,10 +136,6 @@
                                         },
                                         "meta": {
                                             "properties": {
-                                                "search_field": {
-                                                    "type": "string",
-                                                    "example": "subject"
-                                                },
                                                 "search_value": {
                                                     "type": "string",
                                                     "example": "explicabo"
@@ -175,14 +162,14 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid search or sort field",
+                        "description": "Invalid sort field",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "errors": {
                                             "type": "string",
-                                            "example": "Invalid search field"
+                                            "example": "Invalid sort field"
                                         }
                                     },
                                     "type": "object"
